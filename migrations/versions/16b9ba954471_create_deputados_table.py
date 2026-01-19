@@ -21,6 +21,7 @@ def upgrade() -> None:
     """Upgrade schema."""
     op.create_table('deputados',
     sa.Column('id', sa.INTEGER(), autoincrement=True, nullable=False),
+    sa.Column('uri', sa.VARCHAR(), nullable=False),
     sa.Column('nome', sa.VARCHAR(), nullable=False),
     sa.Column('nomeCivil', sa.VARCHAR(), nullable=False),
     sa.Column('siglaSexo', sa.VARCHAR(), nullable=False),
@@ -29,6 +30,7 @@ def upgrade() -> None:
     sa.Column('ufNascimento', sa.VARCHAR()),
     sa.Column('municipioNascimento', sa.VARCHAR()),
     sa.Column('dataNascimento', sa.DATE()),
+    sa.Column('dataFalecimento', sa.DATE()),
     sa.PrimaryKeyConstraint('id', name=op.f('deputados_pkey'))
     )
 

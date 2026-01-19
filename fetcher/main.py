@@ -1,5 +1,9 @@
-from camara.resources.legislatura import fetch_legislaturas, transform_legislaturas
+from camara.resources.deputado import DeputadoResource
+from camara.db.session import SessionLocal
 
 if __name__ == "__main__":
-    legislaturas = fetch_legislaturas()
-    print(transform_legislaturas())
+    resource = DeputadoResource("0 0 * * *")
+    response = resource.fetch()
+    data = resource.parse(response)
+    resource.save(SessionLocal(), data)
+

@@ -38,3 +38,8 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+
+# Folder
+*data/
+*logs/
+*temp/
