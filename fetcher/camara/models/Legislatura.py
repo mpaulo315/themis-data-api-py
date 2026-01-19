@@ -1,11 +1,14 @@
-from pydantic import BaseModel, Field
-from typing import Annotated
+from sqlalchemy import Integer, Date
+from sqlalchemy.orm import Mapped, mapped_column
+from camara.db.session import Base
 
-LegislaturaID = int
+LegislaturaID = Integer
 
-class Legislatura(BaseModel):
-    idLegislatura: Annotated[LegislaturaID, Field(description="ID da legislatura")]
-    uri: Annotated[str, Field(description="URI da legislatura")]
-    dataInicio: Annotated[str, Field(description="Data de início da legislatura")]
-    dataFim: Annotated[str, Field(description="Data de fim da legislatura")]
-    anoEleicao: Annotated[int, Field(description="Ano da eleição")]
+class Legislatura(Base):
+    __tablename__ = "legislatura"
+
+    idLegislatura = mapped_column(LegislaturaID, primary_key=True, index=True)
+    numero = mapped_column(Integer, nullable=False)
+    dataInicio = mapped_column(Date, nullable=False)
+    dataFim = mapped_column(Date, nullable=False)
+    anoEleicao = mapped_column(Integer, nullable=False)
