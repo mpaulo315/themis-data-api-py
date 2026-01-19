@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from utils import CamaraAPIResponse
 from camara.db.session import Base as Model
-from pydantic import BaseModel as Schema
 from datetime import datetime
 from croniter import croniter
 from sqlalchemy.orm import Session
@@ -9,7 +8,6 @@ from sqlalchemy import insert
 
 class CamaraResource(ABC):
     model: Model
-    schema: Schema
     last_downloaded: datetime
     last_updated: datetime
     last_updated_message: str
@@ -31,14 +29,14 @@ class CamaraResource(ABC):
         pass
 
     @abstractmethod
-    def parse(self, response: CamaraAPIResponse) -> list[Schema]:
+    def transform(self, response: CamaraAPIResponse) -> list[dict[str, any]]:
         pass
     
     # Criar alguns decorators específicos para essa função e fazer a limpeza da tabela
     # antes da inserção. Opções: Delete geral, delete por parâmetro, sem deleção
-    def save(self, db: Session, data: list[Schema]) -> None:
+    def save(self, db: Session, data: list[dict[str, any]]) -> None:
         try:
-            models = [self.model(**item.model_dump()) for item in data]
+            models = [self.model(**item) for item in data]
             db.add_all(models)
             db.commit()
             self.last_updated = datetime.now()

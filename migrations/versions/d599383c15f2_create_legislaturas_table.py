@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.create_table(
         "legislaturas",
         sa.Column("idLegislatura", sa.Integer, primary_key=True),
-        sa.Column("numero", sa.Integer, nullable=False),
+        sa.Column("uri", sa.String, nullable=False),
         sa.Column("dataInicio", sa.Date, nullable=False),
         sa.Column("dataFim", sa.Date, nullable=False),
         sa.Column("anoEleicao", sa.Integer, nullable=False),

@@ -1,9 +1,9 @@
-from camara.resources.deputado import DeputadoResource
+from camara.resources.legislatura import LegislaturaResource
 from camara.db.session import SessionLocal
 
 if __name__ == "__main__":
-    resource = DeputadoResource("0 0 * * *")
+    resource = LegislaturaResource("0 0 * * *")
     response = resource.fetch()
-    data = resource.parse(response)
+    data = resource.transform(response)
     resource.save(SessionLocal(), data)
 
