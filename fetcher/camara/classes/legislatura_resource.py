@@ -4,7 +4,7 @@ from classes.resource import ROOT_PATH, CamaraResource
 from camara.types import CamaraAPIResponse
 from camara.config.data_file import LEGISLATURAS_URL
 from utils import download_file
-from types.legislatura import Legislatura
+from typings.legislatura import Legislatura
 
 
 class LegislaturaResource(CamaraResource[Legislatura]):

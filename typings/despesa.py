@@ -2,8 +2,8 @@ from datetime import date, datetime
 from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
-from types.deputado import DeputadoID
-from types.legislatura import LegislaturaID
+from typings.deputado import DeputadoID
+from typings.legislatura import LegislaturaID
 
 DespesaID = int
 

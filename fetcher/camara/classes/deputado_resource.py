@@ -5,7 +5,7 @@ from classes.resource import ROOT_PATH, CamaraResource
 from camara.config.data_file import DEPUTADOS_URL
 from fetcher.camara.types import CamaraAPIResponse
 from utils import download_file
-from types.deputado import Deputado
+from typings.deputado import Deputado
 
 class DeputadoResource(CamaraResource[Deputado]):
     model = Deputado

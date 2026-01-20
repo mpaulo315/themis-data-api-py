@@ -5,7 +5,7 @@ from classes.resource import ROOT_PATH, CamaraResource
 from camara.config.data_file import DESPESAS_URL_BUILDER, MIN_ANO_DESPESAS
 from camara.types import CamaraAPIResponse
 from utils import download_file
-from types.despesa import Despesa
+from typings.despesa import Despesa
 from io import TextIOWrapper
 
 

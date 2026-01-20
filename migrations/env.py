@@ -3,9 +3,9 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 import os
 from dotenv import load_dotenv
-from fetcher.camara.db.session import DATABASE_URL
 
-from fetcher.camara.db.session import Base
+from config.db import DATABASE_URL
+from db.base import Base
 from fetcher.camara import models
 
 load_dotenv(override=True)

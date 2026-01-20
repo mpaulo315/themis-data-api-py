@@ -1,11 +1,22 @@
 from fastapi import APIRouter
+from sqlalchemy import select
+from db.session import SessionLocal
+from typings.legislatura import Legislatura
 
-router = APIRouter(prefix="/legislatura", tags=["legislatura"])
+router = APIRouter(prefix="/legislaturas", tags=["Legislatura"])
 
 @router.get("/")
 async def read_legislatura():
-    return ["2023", "2024"]
+    with SessionLocal() as db:
+        result = db.execute(select(Legislatura))
+        
+        return result.scalars().all()
 
 @router.get("/{legislatura_id}")
 async def read_legislatura_by_id(legislatura_id: int):
-    return {"legislatura_id": legislatura_id}
+    with SessionLocal() as db:
+        legislatura = db.execute(
+            select(Legislatura).where(Legislatura.idLegislatura == legislatura_id)
+        ).scalar()
+
+    return legislatura
