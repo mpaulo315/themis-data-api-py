@@ -3,7 +3,7 @@ from sqlalchemy import select
 from db.session import SessionLocal
 from typings.legislatura import Legislatura
 
-router = APIRouter(prefix="/legislaturas", tags=["Legislatura"])
+router = APIRouter(prefix="/legislaturas", tags=["Legislaturas"])
 
 @router.get("/")
 async def read_legislatura():
@@ -15,8 +15,7 @@ async def read_legislatura():
 @router.get("/{legislatura_id}")
 async def read_legislatura_by_id(legislatura_id: int):
     with SessionLocal() as db:
-        legislatura = db.execute(
+        result = db.execute(
             select(Legislatura).where(Legislatura.idLegislatura == legislatura_id)
-        ).scalar()
-
-    return legislatura
+        )
+        return result.scalars().first()

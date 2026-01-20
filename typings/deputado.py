@@ -9,7 +9,7 @@ DeputadoID = int
 
 class Deputado(SQLModel, table=True):
     __tablename__ = "deputados"
-    __table_args__ = {"schema": "camara"}
+    # __table_args__ = {"schema": "camara"}
 
     @field_validator("dataNascimento", "dataFalecimento", mode="before")
     @classmethod
@@ -18,11 +18,14 @@ class Deputado(SQLModel, table=True):
             return None
         return datetime.strptime(value.split("T")[0], "%Y-%m-%d").date()
 
-    @computed_field
-    @property
-    def id(self) -> DeputadoID:
-        return int(self.uri.split("/")[-1])
+    @field_validator("id", mode="before")
+    @classmethod
+    def extract_id_from_uri(cls, value, info):
+        if value is None and "uri" in info.data:
+            return int(info.data["uri"].split("/")[-1])
+        return value
     
+    id: DeputadoID = Field(primary_key=True, index=True)
     uri: str
     nome: str = Field(index=True)
     nomeCivil: str = Field(index=True)
