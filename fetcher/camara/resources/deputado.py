@@ -15,7 +15,7 @@ class DeputadoResource(CamaraResource):
     def _validate_data(self, value):
         if isinstance(value, str):
             if len(value) == 0:
-                return None 
+                return None
             return datetime.strptime(value, "%Y-%m-%d").date()
         
         return value
@@ -37,10 +37,13 @@ class DeputadoResource(CamaraResource):
 
         for d in response.get("dados", []):
             rows.append({
-                **{k: v for k, v in d.items()},
                 "id": int(d["uri"].split("/")[-1]),
-                "idLegislaturaInicial": int(d["idLegislatura"]),
-                "idLegislaturaFinal": int(d["idLegislatura"]),
+                "uri": d["uri"],
+                "nome": d["nome"],
+                "nomeCivil": d["nomeCivil"],
+                "siglaSexo": d["siglaSexo"],
+                "idLegislaturaInicial": int(d["idLegislaturaInicial"]),
+                "idLegislaturaFinal": int(d["idLegislaturaFinal"]),
                 "dataNascimento": self._validate_data(d.get("dataNascimento")),
                 "dataFalecimento": self._validate_data(d.get("dataFalecimento")),
             })
