@@ -1,9 +1,15 @@
-from camara.resources.despesas import DespesasResource
-from camara.db.session import SessionLocal
+from db.session import SessionLocal
+from fetcher.core.scheduler import Scheduler
+from fetcher.seed.jobs import seed_jobs
+
+
+def main():
+    print("Starting fetcher...")
+    with SessionLocal() as session:
+        seed_jobs(session)
+
+    scheduler = Scheduler()
+    scheduler.run_all_jobs()
 
 if __name__ == "__main__":
-    resource = DespesasResource("0 0 * * *")
-    response = resource.fetch()
-    data = resource.transform(response)
-    resource.save(SessionLocal(), data)
-
+    main()

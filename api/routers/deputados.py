@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from sqlalchemy import select
+from api.config.main import QUERY_LIMIT
 from db.session import SessionLocal
 from typings.deputado import Deputado
 
@@ -7,9 +8,10 @@ from typings.deputado import Deputado
 router = APIRouter(prefix="/deputados", tags=["Deputados"])
 
 @router.get("/")
-async def read_deputados():
+async def read_deputados(skip: int = 0, limit: int = QUERY_LIMIT):
     with SessionLocal() as db:
-        result = db.execute(select(Deputado))
+        
+        result = db.execute(select(Deputado).offset(skip).limit(limit))
         
         return result.scalars().all()
 
