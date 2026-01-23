@@ -12,22 +12,26 @@ class Deputado(SQLModel, table=True):
 
     @model_validator(mode="before")
     @classmethod
-    def normalize_and_derive(cls, data, info):
+    def normalize_and_derive(cls, data):
         if isinstance(data, cls):
             return data
         
         if not isinstance(data, dict):
-            raise ValueError("Invalid data type")
+            raise ValueError("Data must be a dictionary")
         
         data = {
             k: (None if isinstance(v, str) and not v.strip() else v)
             for k, v in data.items()
         }
-        
-        if data.get("uri") in data:
+                
+        if data.get("uri") is not None:
+            print("entrei")
+            
             data["id"] = int(data["uri"].split("/")[-1])
-        
-        return data
+
+            return data
+
+        raise ValueError(f"Invalid data: {data}")        
     
     @field_validator("dataNascimento", "dataFalecimento", mode="before")
     @classmethod
@@ -47,7 +51,7 @@ class Deputado(SQLModel, table=True):
     idLegislaturaInicial: LegislaturaID = Field(foreign_key="legislaturas.idLegislatura", index=True)
     idLegislaturaFinal: LegislaturaID = Field(foreign_key="legislaturas.idLegislatura", index=True)
 
-    ufNascimento: str = Field(index=True)
-    municipioNascimento: str = Field(index=True)
+    ufNascimento: str | None = Field(index=True)
+    municipioNascimento: str | None = Field(index=True)
     dataNascimento: date | None = Field(default=None)
     dataFalecimento: date | None = Field(default=None)

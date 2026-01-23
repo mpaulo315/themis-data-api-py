@@ -20,14 +20,11 @@ class JobRunner(Generic[T]):
         
     
     def is_stale(self) -> bool:
-        # It means the job has never run successfully
+        # Significa que o job não foi executado com sucesso
         if not self.job.last_success_timestamp or self.session.query(self.resource.model).count() == 0:
             return True
         
         next_cron = croniter(self.job.cron_expression, self.job.last_success_timestamp).get_next(datetime)
-        print(f"Next cron: {next_cron}")
-        print(f"Current time: {datetime.now()}")
-        print(f"Is stale: {next_cron <= datetime.now()}")
         return next_cron <= datetime.now()
 
     def run(self):
@@ -37,13 +34,25 @@ class JobRunner(Generic[T]):
         try:
             raw_data = self.resource.fetch()
             data = self.resource.parse(raw_data)
-            DatabaseStorage.bulk_insert(self.session, self.resource.model, data)
+
+            DatabaseStorage.apply_strategy(
+                strategy=self.job.update_strategy,
+                session=self.session,
+                model=self.resource.model,
+                items=data,
+                where_clause=self.job.args.get("where_clause"),
+                index_elements=self.job.args.get("index_elements")
+            )
 
             self.job.last_success_timestamp = datetime.now()
             self.job.last_run_message = "Job completed successfully"
-            
+
+            self.job.execution_time_seconds = (datetime.now() - self.job.last_success_timestamp).total_seconds()
+
             if self.job.runs is not None:
                 self.job.decrement_runs()
+
+            print(f"Job {self.job.id} executed successfully")
 
         except Exception as e:
             self.session.rollback()

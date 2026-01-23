@@ -1,16 +1,18 @@
 CREATE TABLE IF NOT EXISTS despesas_deputado (
     id SERIAL PRIMARY KEY,
-    "idDocumento" INT NOT NULL,
+
+    "idDocumento" INT,
+    "nomeParlamentar" VARCHAR(255) NOT NULL,
     mes INT NOT NULL,
     ano INT NOT NULL,
     "codigoLegislatura" INT NOT NULL,
-
-    "nomeParlamentar" VARCHAR(255),
+    "siglaUF" VARCHAR(2),
+    "siglaPartido" VARCHAR(2),
+    fornecedor VARCHAR(255) NOT NULL,
     "idDeputado" INT,
 
     descricao VARCHAR(255) NOT NULL,
-    fornecedor VARCHAR(255) NOT NULL,
-    "dataEmissao" DATE NOT NULL,
+    "dataEmissao" DATE,
     "valorDocumento" FLOAT NOT NULL,
     "valorGlosa" FLOAT,
     "valorLiquido" FLOAT,

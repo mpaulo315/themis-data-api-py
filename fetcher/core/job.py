@@ -1,8 +1,11 @@
 from datetime import datetime
 from enum import IntEnum
+from typing import Optional
 from sqlalchemy import JSON, Column, Enum
 from sqlmodel import Field, SQLModel
 from pydantic import ConfigDict
+
+from fetcher.core.storage import UpdateStrategy
 
 class DatasetType(str, Enum):
     DEPUTADO = "deputado"
@@ -21,10 +24,11 @@ class Job(SQLModel, table=True):
     model_config = ConfigDict(arbitrary_types_allowed=True)
     __tablename__ = "jobs"
 
-    id: int = Field(primary_key=True)
+    id: Optional[int] = Field(primary_key=True, index=True, default=None)
     name: str
     dataset_type: DatasetType
     resource_kind: ResourceKind
+    update_strategy: UpdateStrategy
     cron_expression: str
     status: int
     runs: int | None = Field(default=None)
@@ -34,6 +38,7 @@ class Job(SQLModel, table=True):
     last_failure_timestamp: datetime | None = Field(default=None)
     last_run_message: str | None = Field(default=None)
     additional_info: dict | None = Field(default_factory=dict, sa_column=Column(JSON))
+    execution_time_seconds: int | None = Field(default=None)
 
     def decrement_runs(self) -> None:
         self.runs = self.runs - 1 if self.runs is not None and self.runs > 0 else 0
