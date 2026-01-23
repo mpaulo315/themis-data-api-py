@@ -10,27 +10,32 @@ from sqlalchemy.orm import Session
 
 from fetcher.core.storage import DatabaseStorage
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 class JobRunner(Generic[T]):
     def __init__(self, job: Job, resource: Resource[T], session: Session):
         self.job = job
         self.resource = resource
         self.session = session
-        
-    
+
     def is_stale(self) -> bool:
         # Significa que o job não foi executado com sucesso
-        if not self.job.last_success_timestamp or self.session.query(self.resource.model).count() == 0:
+        if (
+            not self.job.last_success_timestamp
+            or self.session.query(self.resource.model).count() == 0
+        ):
             return True
-        
-        next_cron = croniter(self.job.cron_expression, self.job.last_success_timestamp).get_next(datetime)
+
+        next_cron = croniter(
+            self.job.cron_expression, self.job.last_success_timestamp
+        ).get_next(datetime)
         return next_cron <= datetime.now()
 
     def run(self):
         if not self.is_stale():
             return
-        
+
         try:
             raw_data = self.resource.fetch()
             data = self.resource.parse(raw_data)
@@ -41,13 +46,15 @@ class JobRunner(Generic[T]):
                 model=self.resource.model,
                 items=data,
                 where_clause=self.job.args.get("where_clause"),
-                index_elements=self.job.args.get("index_elements")
+                index_elements=self.job.args.get("index_elements"),
             )
 
             self.job.last_success_timestamp = datetime.now()
             self.job.last_run_message = "Job completed successfully"
 
-            self.job.execution_time_seconds = (datetime.now() - self.job.last_success_timestamp).total_seconds()
+            self.job.execution_time_seconds = (
+                datetime.now() - self.job.last_success_timestamp
+            ).total_seconds()
 
             if self.job.runs is not None:
                 self.job.decrement_runs()

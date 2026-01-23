@@ -7,18 +7,22 @@ from pydantic import ConfigDict
 
 from fetcher.core.storage import UpdateStrategy
 
+
 class DatasetType(str, Enum):
     DEPUTADO = "deputado"
     LEGISLATURA = "legislatura"
     DESPESA_DEPUTADO = "despesa_deputado"
 
+
 class ResourceKind(str, Enum):
     JSON_ZIP = "json_zip"
     JSON = "json"
 
+
 class JobStatus(IntEnum):
     DISABLED = 0
     ACTIVE = 1
+
 
 class Job(SQLModel, table=True):
     model_config = ConfigDict(arbitrary_types_allowed=True)
@@ -42,4 +46,8 @@ class Job(SQLModel, table=True):
 
     def decrement_runs(self) -> None:
         self.runs = self.runs - 1 if self.runs is not None and self.runs > 0 else 0
-        self.status = JobStatus.ACTIVE if self.runs > 0 or self.runs is None else JobStatus.DISABLED
+        self.status = (
+            JobStatus.ACTIVE
+            if self.runs > 0 or self.runs is None
+            else JobStatus.DISABLED
+        )

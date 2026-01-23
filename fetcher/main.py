@@ -12,5 +12,6 @@ def main():
     scheduler = Scheduler()
     scheduler.run_all_jobs()
 
+
 if __name__ == "__main__":
     main()

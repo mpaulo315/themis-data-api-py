@@ -4,6 +4,7 @@ from typings.deputado import Deputado
 from typings.legislatura import Legislatura
 from typings.despesa_deputado import DespesaDeputado
 
+
 class ResourceFactory:
     @staticmethod
     def create(job: Job) -> Resource:
@@ -16,11 +17,13 @@ class ResourceFactory:
                 model = DespesaDeputado
             case _:
                 raise ValueError(f"Tipo de dataset desconhecido: {job.dataset_type}")
-        
+
         match job.resource_kind:
             case ResourceKind.JSON_ZIP:
                 if job.args.get("json_filename") is None:
-                    raise ValueError("json_filename is required for JSON_ZIP resource kind")
+                    raise ValueError(
+                        "json_filename is required for JSON_ZIP resource kind"
+                    )
                 if job.args.get("url") is None:
                     raise ValueError("url is required for JSON_ZIP resource kind")
                 return CamaraJSONZIPResource(
