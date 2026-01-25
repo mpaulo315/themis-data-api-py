@@ -1,0 +1,8 @@
+from fastapi import FastAPI
+from api.routers import deputado, legislatura
+
+app = FastAPI()
+
+
+app.include_router(legislatura.router)
+app.include_router(deputado.router)

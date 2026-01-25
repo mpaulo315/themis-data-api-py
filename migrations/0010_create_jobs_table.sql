@@ -1,4 +1,4 @@
-CREATE TABLE jobs (
+CREATE TABLE IF NOT EXISTS jobs (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     dataset_type VARCHAR(255) NOT NULL,

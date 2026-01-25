@@ -6,7 +6,7 @@ services:
     container_name: postgres_themis
     restart: always
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:5432"
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_USER: "${DB_USER}"
