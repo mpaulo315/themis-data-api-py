@@ -5,7 +5,7 @@ from sqlalchemy import JSON, Column, Enum
 from sqlmodel import Field, SQLModel
 from pydantic import ConfigDict
 
-from fetcher.core.storage import UpdateStrategy
+from src.fetcher.core.storage import UpdateStrategy
 
 
 class DatasetType(str, Enum):

@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
-from fetcher.core.job import Job
-from fetcher.core.job import DatasetType, ResourceKind, JobStatus
-from fetcher.config.data_file import (
+from src.fetcher.core.job import Job
+from src.fetcher.core.job import DatasetType, ResourceKind, JobStatus
+from src.fetcher.config.data_file import (
     DEPUTADOS_URL,
     DESPESAS_URL_BUILDER,
     LEGISLATURAS_URL,
     MIN_ANO_DESPESAS,
 )
-from fetcher.core.storage import UpdateStrategy
+from src.fetcher.core.storage import UpdateStrategy
 
 
 def seed_jobs(session: Session):

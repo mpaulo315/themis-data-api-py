@@ -2,7 +2,7 @@ from datetime import date, datetime
 from pydantic import field_validator, model_validator
 from sqlmodel import SQLModel, Field
 
-from typings.legislatura import LegislaturaID
+from src.typings.legislatura import LegislaturaID
 
 DeputadoID = int
 
@@ -26,8 +26,6 @@ class Deputado(SQLModel, table=True):
         }
 
         if data.get("uri") is not None:
-            print("entrei")
-
             data["id"] = int(data["uri"].split("/")[-1])
 
             return data

@@ -3,7 +3,7 @@ from sqlalchemy import Enum, delete
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from sqlmodel import SQLModel
-
+from tqdm import tqdm, trange
 
 class WhereClause(TypedDict):
     column: str
@@ -21,7 +21,7 @@ T = TypeVar("T", bound=SQLModel)
 
 
 class DatabaseStorage:
-    CHUNK_SIZE = 2
+    CHUNK_SIZE = 2000
 
     @classmethod
     def apply_strategy(
@@ -62,7 +62,7 @@ class DatabaseStorage:
 
     @classmethod
     def smart_bulk_insert(cls, session: Session, items: Iterable[T]):
-        for i in range(0, len(items), cls.CHUNK_SIZE):
+        for i in trange(0, len(items), cls.CHUNK_SIZE, desc="Inserting chunks", position=0):
             batch = items[i : i + cls.CHUNK_SIZE]
 
             try:
@@ -71,7 +71,7 @@ class DatabaseStorage:
             except Exception as e:
                 session.rollback()
 
-                for item in batch:
+                for item in tqdm(items, desc="Inserting items", position=1, leave=False):
                     try:
                         session.add(item)
                         session.commit()
@@ -88,32 +88,59 @@ class DatabaseStorage:
         items: Iterable[T],
         index_elements: list[str],
     ):
-        for e in index_elements:
-            if not isinstance(e, str):
-                raise ValueError("Index elements must be strings")
-            if not hasattr(model, e):
-                raise ValueError(f"Model {model.__name__} does not have attribute {e}")
+        table = model.__table__
 
-        for i in range(0, len(items), cls.CHUNK_SIZE):
+        for col in index_elements:
+            if col not in table.c:
+                raise ValueError(f"Column '{col}' not found in {model.__name__}")
+
+        for i in trange(0, len(items), cls.CHUNK_SIZE, desc="Upserting chunks"):
             batch = items[i : i + cls.CHUNK_SIZE]
+            values = [item.model_dump(exclude_unset=True) for item in batch]
+
+            stmt = insert(table).values(values)
+
+            stmt = stmt.on_conflict_do_update(
+                index_elements=index_elements,
+                set_={
+                    c.name: getattr(stmt.excluded, c.name)
+                    for c in table.columns
+                    if c.name not in index_elements
+                },
+            )
 
             try:
-                stmt = insert(model).values(batch)
-                stmt.on_conflict_do_update(index_elements=index_elements, set_=batch)
-
                 session.execute(stmt)
                 session.commit()
-            except Exception as e:
+
+            except Exception as bulk_exc:
                 session.rollback()
 
+                # 🔍 isolate the bad row, but KEEP UPSERT semantics
                 for item in batch:
+                    row = item.model_dump(exclude_unset=True)
+
+                    stmt = insert(table).values(row)
+                    stmt = stmt.on_conflict_do_update(
+                        index_elements=index_elements,
+                        set_={
+                            c.name: getattr(stmt.excluded, c.name)
+                            for c in table.columns
+                            if c.name not in index_elements
+                        },
+                    )
+
                     try:
-                        session.add(item)
+                        session.execute(stmt)
                         session.commit()
-                    except Exception as e:
+
+                    except Exception as row_exc:
                         session.rollback()
 
-                        raise e
+                        # 🎯 this is your troublemaker
+                        raise RuntimeError(
+                            f"Failed upsert for row: {row}"
+                        ) from row_exc
 
     @classmethod
     def delete(

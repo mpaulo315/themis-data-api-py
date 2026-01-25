@@ -1,9 +1,9 @@
-from db.session import SessionLocal
+from src.db.session import SessionLocal
 from sqlalchemy import select
 
-from fetcher.core.job import Job, JobStatus
-from fetcher.core.job_runner import JobRunner
-from fetcher.core.resource_factory import ResourceFactory
+from src.fetcher.core.job import Job, JobStatus
+from src.fetcher.core.job_runner import JobRunner
+from src.fetcher.core.resource_factory import ResourceFactory
 
 
 class Scheduler:

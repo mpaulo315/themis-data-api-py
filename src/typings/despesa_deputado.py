@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic import field_validator, model_validator
 from sqlmodel import Field, SQLModel
 
-from typings.deputado import DeputadoID
-from typings.legislatura import LegislaturaID
+from src.typings.deputado import DeputadoID
+from src.typings.legislatura import LegislaturaID
 
 DespesaID = int
 

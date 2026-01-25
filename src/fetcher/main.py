@@ -1,7 +1,7 @@
-from db.session import SessionLocal
-from fetcher.core.job import Job
-from fetcher.core.scheduler import Scheduler
-from fetcher.seed.jobs import seed_jobs
+from src.db.session import SessionLocal
+from src.fetcher.core.job import Job
+from src.fetcher.core.scheduler import Scheduler
+from src.fetcher.seed.jobs import seed_jobs
 
 
 def main():

@@ -1,8 +1,8 @@
-from fetcher.core.job import DatasetType, ResourceKind, Job
-from fetcher.core.resource import Resource, CamaraJSONZIPResource, CamaraJSONResource
-from typings.deputado import Deputado
-from typings.legislatura import Legislatura
-from typings.despesa_deputado import DespesaDeputado
+from src.fetcher.core.job import DatasetType, ResourceKind, Job
+from src.fetcher.core.resource import Resource, CamaraJSONZIPResource, CamaraJSONResource
+from src.typings.deputado import Deputado
+from src.typings.legislatura import Legislatura
+from src.typings.despesa_deputado import DespesaDeputado
 
 
 class ResourceFactory:

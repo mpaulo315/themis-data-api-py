@@ -3,12 +3,12 @@ from typing import Generic, TypeVar
 from croniter import croniter
 from datetime import datetime
 
-from fetcher.core.job import Job
-from fetcher.core.resource import Resource
-from fetcher.core.storage import DatabaseStorage
+from src.fetcher.core.job import Job
+from src.fetcher.core.resource import Resource
+from src.fetcher.core.storage import DatabaseStorage
 from sqlalchemy.orm import Session
 
-from fetcher.core.storage import DatabaseStorage
+from src.fetcher.core.storage import DatabaseStorage
 
 T = TypeVar("T")
 
@@ -37,9 +37,15 @@ class JobRunner(Generic[T]):
             return
 
         try:
+            start_datetime = datetime.now()
+            print(f"Job {self.job.id} started")
             raw_data = self.resource.fetch()
+            print(f"Job {self.job.id} fetched data")
             data = self.resource.parse(raw_data)
+            print(f"Job {self.job.id} parsed data")
 
+            print(f"Job {self.job.id} ({self.job.name}) applying strategy: {self.job.update_strategy}")
+            print(f"Data length: {len(data)}")
             DatabaseStorage.apply_strategy(
                 strategy=self.job.update_strategy,
                 session=self.session,
@@ -48,12 +54,12 @@ class JobRunner(Generic[T]):
                 where_clause=self.job.args.get("where_clause"),
                 index_elements=self.job.args.get("index_elements"),
             )
-
+            print(f"Job {self.job.id} applied strategy")
             self.job.last_success_timestamp = datetime.now()
-            self.job.last_run_message = "Job completed successfully"
+            self.job.last_run_message = f"Job {self.job.id} completed successfully"
 
             self.job.execution_time_seconds = (
-                datetime.now() - self.job.last_success_timestamp
+                datetime.now() - start_datetime
             ).total_seconds()
 
             if self.job.runs is not None:
