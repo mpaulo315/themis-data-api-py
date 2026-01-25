@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.routers import deputado, legislatura
+from src.api.routers import deputado, legislatura
 
 app = FastAPI()
 

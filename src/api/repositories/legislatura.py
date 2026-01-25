@@ -1,6 +1,6 @@
-from api.dependencies.db import DBSessionDep
-from api.repositories.base import BaseRepository
-from typings.legislatura import Legislatura
+from src.api.dependencies.db import DBSessionDep
+from src.api.repositories.base import BaseRepository
+from src.typings.legislatura import Legislatura
 
 
 class LegislaturaRepository(BaseRepository):

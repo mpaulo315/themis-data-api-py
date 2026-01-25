@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from sqlalchemy import select
-from api.config.main import QUERY_LIMIT
-from db.session import SessionLocal
-from typings.legislatura import Legislatura
+from src.api.config.main import QUERY_LIMIT
+from src.db.session import SessionLocal
+from src.typings.legislatura import Legislatura
 
 router = APIRouter(prefix="/legislaturas", tags=["Legislaturas"])
 

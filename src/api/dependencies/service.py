@@ -1,8 +1,8 @@
 from typing import Annotated
 from fastapi import Depends
-from api.dependencies.db import DBSessionDep
-from api.dependencies.repository import DeputadoRepositoryDep
-from api.services.deputado import DeputadoService
+from src.api.dependencies.db import DBSessionDep
+from src.api.dependencies.repository import DeputadoRepositoryDep
+from src.api.services.deputado import DeputadoService
 
 
 def get_deputado_service(

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlmodel import SQLModel
-from api.config.main import QUERY_FIRST_PAGE, QUERY_LIMIT
+from src.api.config.main import QUERY_FIRST_PAGE, QUERY_LIMIT
 
 
 class BaseRepository:

@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from sqlalchemy import select
-from api.dependencies.service import DeputadoServiceDep
-from db.session import SessionLocal
-from typings.deputado import Deputado
+from src.api.dependencies.service import DeputadoServiceDep
+from src.db.session import SessionLocal
+from src.typings.deputado import Deputado
 
 router = APIRouter(prefix="/deputados", tags=["Deputados"])
 

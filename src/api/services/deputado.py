@@ -1,8 +1,8 @@
 from sqlalchemy.sql.expression import func
 
-from api.dependencies.db import DBSessionDep
-from api.dependencies.repository import DeputadoRepositoryDep
-from typings.legislatura import Legislatura
+from src.api.dependencies.db import DBSessionDep
+from src.api.dependencies.repository import DeputadoRepositoryDep
+from src.typings.legislatura import Legislatura
 
 class DeputadoService:
     def __init__(self, db_session: DBSessionDep, repo: DeputadoRepositoryDep):
