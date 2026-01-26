@@ -1,7 +1,4 @@
 from os import getenv
-import dotenv
-
-dotenv.load_dotenv(".env.prod")
 
 DB_USER = getenv("DB_USER")
 DB_PASSWORD = getenv("DB_PASSWORD")

@@ -1,10 +1,12 @@
-from fastapi import APIRouter
-from sqlalchemy import select
+from api.auth.header_auth import check_header_auth
+from fastapi import APIRouter, Depends
 from src.api.dependencies.service import DeputadoServiceDep
-from src.db.session import SessionLocal
-from src.typings.deputado import Deputado
 
-router = APIRouter(prefix="/deputados", tags=["Deputados"])
+router = APIRouter(
+    prefix="/deputados", 
+    tags=["Deputados"],
+    dependencies=[Depends(check_header_auth)]
+)
 
 
 @router.get("/")
