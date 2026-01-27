@@ -13,16 +13,15 @@ else:
 from fastapi import APIRouter, Depends, FastAPI
 from src.api.routers import deputado, legislatura
 
-main_app = FastAPI()
+app = FastAPI()
 private_api = FastAPI()
 
 private_api.include_router(legislatura.router, dependencies=[Depends(check_header_auth)])
 private_api.include_router(deputado.router, dependencies=[Depends(check_header_auth)])
 
-
-@main_app.get("/health")
+@app.get("/health")
 async def health():
     return {"status": "ok"}
 
 
-main_app.mount("/api/v1", private_api)
+app.mount("/api/v1", private_api)
