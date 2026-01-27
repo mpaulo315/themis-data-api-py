@@ -1,3 +1,5 @@
+from typing import NamedTuple
+from src.api.repositories.deputado import FilterParams
 from sqlalchemy.sql.expression import func
 
 from src.api.dependencies.db import DBSessionDep
@@ -9,13 +11,13 @@ class DeputadoService:
         self.db_session = db_session
         self.repo = repo
 
-    def get_all(self):
+    def get_all(self, filter_params: FilterParams) -> NamedTuple:
         ultima_legislatura = self.db_session.query(func.max(Legislatura.idLegislatura)).scalar()
         
         if ultima_legislatura is None:
             return []
 
-        return self.repo.get_all(idLegislatura=ultima_legislatura)
+        return self.repo.get_all(idLegislatura=ultima_legislatura, filter_params=filter_params)
 
-    def get_by_id(self, id):
-        return self.repo.get_by_id(id)
+    def get_by_id(self, idDeputado) -> NamedTuple:
+        return self.repo.get_by_id(idDeputado)

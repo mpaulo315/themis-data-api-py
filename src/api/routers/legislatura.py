@@ -1,4 +1,4 @@
-from api.auth.header_auth import check_header_auth
+from src.api.auth.header_auth import check_header_auth
 from fastapi import APIRouter, Depends
 from src.api.dependencies.service import LegislaturaServiceDep
 

@@ -1,16 +1,28 @@
-from sqlmodel import Session
+import src.api.config.main as query_config
+from pydantic import BaseModel, Field
 from src.api.dependencies.db import DBSessionDep
 from src.api.repositories.base import BaseRepository
 from src.typings.deputado import Deputado
-from src.typings.legislatura import Legislatura, LegislaturaID
+from src.typings.legislatura import LegislaturaID
 
+from src.api.typings.response import ListResult, SingleResponse
 
+class FilterParams(BaseModel):
+    page_size: int = Field(query_config.QUERY_LIMIT, gt=query_config.QUERY_MIN_LIMIT, le=query_config.QUERY_MAX_LIMIT)
+    page: int = Field(query_config.QUERY_FIRST_PAGE, ge=0)
+    
 class DeputadoRepository(BaseRepository):
     def __init__(self, session: DBSessionDep):
         super().__init__(session, Deputado)
     
 
-    def get_all(self, idLegislatura: LegislaturaID | None = None, municipio: str | None = None, uf: str | None = None):
+    def get_all(
+            self, 
+            filter_params: FilterParams,
+            idLegislatura: LegislaturaID | None = None, 
+            municipio: str | None = None, 
+            uf: str | None = None, 
+        ) -> ListResult:
         query = self.session.query(Deputado)
 
         if idLegislatura:
@@ -22,15 +34,17 @@ class DeputadoRepository(BaseRepository):
         if uf:
             query = query.filter(Deputado.ufNascimento == uf)
         
-        total = query.count()
+        count = query.count()
+
         query_result = (
             query
-            .offset(self.query_first_page * self.query_limit)
-            .limit(self.query_limit)
+            .offset(filter_params.page * filter_params.page_size)
+            .limit(filter_params.page_size)
             .all()
         )
-        return query_result
+        return ListResult(data=[x.model_dump() for x in query_result], count=count)
 
-    def get_by_id(self, idDeputado):
+    def get_by_id(self, idDeputado) -> SingleResponse:
         query_result = self.session.query(Deputado).filter(Deputado.id == idDeputado).first()
-        return query_result, 1 if query_result else 0
+        return SingleResponse(data=query_result.model_dump() if query_result else None)
+    

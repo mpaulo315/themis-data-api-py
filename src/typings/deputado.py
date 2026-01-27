@@ -1,5 +1,6 @@
 from datetime import date, datetime
-from pydantic import field_validator, model_validator
+from typing import Any
+from pydantic import field_serializer, field_validator, model_validator
 from sqlmodel import SQLModel, Field
 
 from src.typings.legislatura import LegislaturaID
@@ -52,6 +53,13 @@ class Deputado(SQLModel, table=True):
     idLegislaturaFinal: LegislaturaID = Field(
         foreign_key="legislaturas.idLegislatura", index=True
     )
+
+    @field_serializer(
+            "dataNascimento", "dataFalecimento")
+    def serialize_date(self, value: Any):
+        if value is None:
+            return None
+        return str(value)
 
     ufNascimento: str | None = Field(index=True)
     municipioNascimento: str | None = Field(index=True)
