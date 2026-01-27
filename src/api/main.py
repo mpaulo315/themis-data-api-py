@@ -16,8 +16,8 @@ from src.api.routers import deputado, legislatura
 main_app = FastAPI()
 private_api = FastAPI()
 
-private_api.include_router(legislatura.router)
-private_api.include_router(deputado.router)
+private_api.include_router(legislatura.router, dependencies=[Depends(check_header_auth)])
+private_api.include_router(deputado.router, dependencies=[Depends(check_header_auth)])
 
 
 @main_app.get("/health")

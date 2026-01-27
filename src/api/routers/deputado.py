@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from api.classes.response import PaginatedResponse
+from src.api.classes.response import PaginatedResponse
 from src.api.repositories.deputado import FilterParams
 from fastapi import APIRouter, Query, Request, status
 from fastapi.responses import JSONResponse
