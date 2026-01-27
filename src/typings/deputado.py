@@ -10,7 +10,6 @@ DeputadoID = int
 
 class Deputado(SQLModel, table=True):
     __tablename__ = "deputados"
-    # __table_args__ = {"schema": "camara"}
 
     @model_validator(mode="before")
     @classmethod
@@ -54,8 +53,7 @@ class Deputado(SQLModel, table=True):
         foreign_key="legislaturas.idLegislatura", index=True
     )
 
-    @field_serializer(
-            "dataNascimento", "dataFalecimento")
+    @field_serializer("dataNascimento", "dataFalecimento")
     def serialize_date(self, value: Any):
         if value is None:
             return None

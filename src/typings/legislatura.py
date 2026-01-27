@@ -7,7 +7,6 @@ LegislaturaID = int
 
 class Legislatura(SQLModel, table=True):
     __tablename__ = "legislaturas"
-    # __table_args__ = {"schema": "camara"}
 
     @field_validator("dataInicio", "dataFim", mode="before")
     @classmethod

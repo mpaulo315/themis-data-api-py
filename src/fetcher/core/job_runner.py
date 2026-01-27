@@ -44,7 +44,9 @@ class JobRunner(Generic[T]):
             data = self.resource.parse(raw_data)
             print(f"Job {self.job.id} parsed data")
 
-            print(f"Job {self.job.id} ({self.job.name}) applying strategy: {self.job.update_strategy}")
+            print(
+                f"Job {self.job.id} ({self.job.name}) applying strategy: {self.job.update_strategy}"
+            )
             print(f"Data length: {len(data)}")
             DatabaseStorage.apply_strategy(
                 strategy=self.job.update_strategy,

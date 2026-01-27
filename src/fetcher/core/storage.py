@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from sqlmodel import SQLModel
 from tqdm import tqdm, trange
 
+
 class WhereClause(TypedDict):
     column: str
     value: Any
@@ -62,7 +63,9 @@ class DatabaseStorage:
 
     @classmethod
     def smart_bulk_insert(cls, session: Session, items: Iterable[T]):
-        for i in trange(0, len(items), cls.CHUNK_SIZE, desc="Inserting chunks", position=0):
+        for i in trange(
+            0, len(items), cls.CHUNK_SIZE, desc="Inserting chunks", position=0
+        ):
             batch = items[i : i + cls.CHUNK_SIZE]
 
             try:
@@ -71,7 +74,9 @@ class DatabaseStorage:
             except Exception as e:
                 session.rollback()
 
-                for item in tqdm(items, desc="Inserting items", position=1, leave=False):
+                for item in tqdm(
+                    items, desc="Inserting items", position=1, leave=False
+                ):
                     try:
                         session.add(item)
                         session.commit()
@@ -116,7 +121,6 @@ class DatabaseStorage:
             except Exception as bulk_exc:
                 session.rollback()
 
-                # 🔍 isolate the bad row, but KEEP UPSERT semantics
                 for item in batch:
                     row = item.model_dump(exclude_unset=True)
 
@@ -137,10 +141,7 @@ class DatabaseStorage:
                     except Exception as row_exc:
                         session.rollback()
 
-                        # 🎯 this is your troublemaker
-                        raise RuntimeError(
-                            f"Failed upsert for row: {row}"
-                        ) from row_exc
+                        raise RuntimeError(f"Failed upsert for row: {row}") from row_exc
 
     @classmethod
     def delete(

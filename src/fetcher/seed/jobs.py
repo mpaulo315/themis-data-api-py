@@ -25,7 +25,7 @@ def seed_deputados_job(session: Session):
         dataset_type=DatasetType.DEPUTADO,
         resource_kind=ResourceKind.JSON,
         update_strategy=UpdateStrategy.UPSERT,
-        cron_expression="0 23 * * 0",  # 23:00 do domingo
+        cron_expression="0 23 * * 0",
         status=JobStatus.ACTIVE,
         args={"url": DEPUTADOS_URL, "index_elements": ["id"]},
     )
@@ -43,7 +43,7 @@ def seed_legislatura_job(session: Session):
         name="legislatura",
         dataset_type=DatasetType.LEGISLATURA,
         resource_kind=ResourceKind.JSON,
-        cron_expression="0 23 * * 0",  # 23:00 do domingo
+        cron_expression="0 23 * * 0",
         update_strategy=UpdateStrategy.FULL_REPLACE,
         status=JobStatus.ACTIVE,
         args={"url": LEGISLATURAS_URL, "index_elements": ["idLegislatura"]},
@@ -63,7 +63,7 @@ def seed_despesas_deputados_job(session: Session):
             name=f"despesas-deputados-{i}",
             dataset_type=DatasetType.DESPESA_DEPUTADO,
             resource_kind=ResourceKind.JSON_ZIP,
-            cron_expression="0 23 * * 0",  # 23:00 do domingo
+            cron_expression="0 23 * * 0",
             update_strategy=UpdateStrategy.PARTIAL_REPLACE,
             status=JobStatus.ACTIVE,
             args={

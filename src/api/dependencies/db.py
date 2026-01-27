@@ -14,4 +14,5 @@ def get_db_session():
     finally:
         db.close()
 
+
 DBSessionDep = Annotated[Session, Depends(get_db_session)]

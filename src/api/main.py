@@ -1,3 +1,4 @@
+from src.api.auth.header_auth import check_header_auth
 from dotenv import load_dotenv
 import os
 
@@ -9,14 +10,19 @@ if ENV_MODE in ("production", "prod"):
 else:
     load_dotenv(dotenv_path=".env.development", override=True)
 
-from fastapi import FastAPI
+from fastapi import APIRouter, Depends, FastAPI
 from src.api.routers import deputado, legislatura
 
-app = FastAPI()
+main_app = FastAPI()
+private_api = FastAPI()
 
-app.include_router(legislatura.router)
-app.include_router(deputado.router)
+private_api.include_router(legislatura.router)
+private_api.include_router(deputado.router)
 
-@app.get("/health")
+
+@main_app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+main_app.mount("/api/v1", private_api)

@@ -11,7 +11,6 @@ DespesaID = int
 
 class DespesaDeputado(SQLModel, table=True):
     __tablename__ = "despesas_deputado"
-    # __table_args__ = {"schema": "camara"}
 
     @model_validator(mode="before")
     @classmethod

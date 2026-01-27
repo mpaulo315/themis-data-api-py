@@ -11,6 +11,6 @@ class LegislaturaService:
 
     def get_all(self):
         return self.repo.get_all()
-    
+
     def get_by_id(self, legislatura_id: LegislaturaID):
         return self.repo.get_by_id(legislatura_id)
