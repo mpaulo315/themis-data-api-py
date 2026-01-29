@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 # from typings.deputado import DeputadoID
 from src.api.dependencies.db import DBSessionDep
 from src.api.repositories.base import BaseRepository
-from typings.despesa_deputado import DespesaDeputado, DespesaID
+from src.typings.despesa_deputado import DespesaDeputado, DespesaID
 from sqlalchemy.orm import Query
 from src.fetcher.config.data_file import MIN_ANO_DESPESAS
 
