@@ -3,10 +3,12 @@ from fastapi import Depends
 from src.api.dependencies.db import DBSessionDep
 from src.api.dependencies.repository import (
     DeputadoRepositoryDep,
+    DespesaDeputadoRepositoryDep,
     LegislaturaRepositoryDep,
 )
 from src.api.services.deputado import DeputadoService
 from src.api.services.legislatura import LegislaturaService
+from src.api.services.despesa_deputado import DespesaDeputadoService
 
 
 def get_deputado_service(
@@ -25,3 +27,10 @@ def get_legislatura_service(
 
 
 LegislaturaServiceDep = Annotated[LegislaturaService, Depends(get_legislatura_service)]
+
+def get_despesa_deputado_service(
+    db: DBSessionDep, despesa_deputado_repo: DespesaDeputadoRepositoryDep
+) -> DespesaDeputadoService:
+    return DespesaDeputadoService(db, despesa_deputado_repo)
+
+DespesaDeputadoServiceDep = Annotated[DespesaDeputadoService, Depends(get_despesa_deputado_service)]

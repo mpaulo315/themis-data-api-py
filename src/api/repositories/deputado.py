@@ -1,19 +1,15 @@
-import src.api.config.main as query_config
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from src.api.dependencies.db import DBSessionDep
 from src.api.repositories.base import BaseRepository
 from src.typings.deputado import Deputado
 from src.typings.legislatura import LegislaturaID
+from sqlalchemy.orm import Query
 
 
-class FilterParams(BaseModel):
-    page_size: int = Field(
-        query_config.QUERY_LIMIT,
-        gt=query_config.QUERY_MIN_LIMIT,
-        le=query_config.QUERY_MAX_LIMIT,
-    )
-    page: int = Field(query_config.QUERY_FIRST_PAGE, ge=0)
-
+class DeputadosQueryParams(BaseModel):
+    idLegislatura: LegislaturaID | None = None
+    municipio: str | None = None
+    uf: str | None = None
 
 class DeputadoRepository(BaseRepository):
     def __init__(self, session: DBSessionDep):
@@ -21,33 +17,21 @@ class DeputadoRepository(BaseRepository):
 
     def get_all(
         self,
-        filter_params: FilterParams,
-        idLegislatura: LegislaturaID | None = None,
-        municipio: str | None = None,
-        uf: str | None = None,
-    ) -> dict:
+        filter_params: DeputadosQueryParams,
+    ) -> Query:
         query = self.session.query(Deputado)
 
-        if idLegislatura:
-            query = query.filter(Deputado.idLegislaturaFinal == idLegislatura)
+        if filter_params.idLegislatura:
+            query = query.filter(Deputado.idLegislaturaFinal == filter_params.idLegislatura)
 
-        if municipio:
-            query = query.filter(Deputado.municipioNascimento.like(f"%{municipio}%"))
+        if filter_params.municipio:
+            query = query.filter(Deputado.municipioNascimento.like(f"%{filter_params.municipio}%"))
 
-        if uf:
-            query = query.filter(Deputado.ufNascimento == uf)
+        if filter_params.uf:
+            query = query.filter(Deputado.ufNascimento == filter_params.uf)
 
-        count = query.count()
+        return query
 
-        query_result = (
-            query.offset(filter_params.page * filter_params.page_size)
-            .limit(filter_params.page_size)
-            .all()
-        )
-        return {"data": [x.model_dump() for x in query_result], "count": count}
 
-    def get_by_id(self, idDeputado) -> dict:
-        query_result = (
-            self.session.query(Deputado).filter(Deputado.id == idDeputado).first()
-        )
-        return {"data": query_result.model_dump() if query_result else None}
+    def get_by_id(self, idDeputado) -> Query:
+        return self.session.query(Deputado).filter(Deputado.id == idDeputado)

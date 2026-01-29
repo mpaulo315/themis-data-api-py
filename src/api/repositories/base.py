@@ -6,3 +6,5 @@ class BaseRepository:
     def __init__(self, session: Session, model: type[SQLModel]):
         self.session = session
         self.model = model
+
+    

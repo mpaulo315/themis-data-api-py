@@ -1,23 +1,26 @@
-from src.api.auth.header_auth import check_header_auth
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
-load_dotenv()
-ENV_MODE = os.getenv("ENV_MODE", "development")
 
-if ENV_MODE in ("production", "prod"):
-    load_dotenv(dotenv_path=".env.production", override=True)
-else:
-    load_dotenv(dotenv_path=".env.development", override=True)
+env = os.getenv("ENV", "development")
 
-from fastapi import APIRouter, Depends, FastAPI
-from src.api.routers import deputado, legislatura
+match env:
+    case "development" | "dev":
+        load_dotenv(dotenv_path=".env.development")
+    case "production" | "prod":
+        load_dotenv(dotenv_path=".env.production")
+    case _:
+        raise ValueError(f"Invalid environment: {env}")
+
+from src.api.auth.header_auth import check_header_auth
+from fastapi import Depends, FastAPI
+from src.api.routers import deputado, legislatura, despesa_deputado
 
 app = FastAPI()
 private_api = FastAPI()
 
-private_api.include_router(legislatura.router, dependencies=[Depends(check_header_auth)])
-private_api.include_router(deputado.router, dependencies=[Depends(check_header_auth)])
+private_api.include_router(legislatura.router, prefix="/legislaturas", dependencies=[Depends(check_header_auth)])
+private_api.include_router(deputado.router, prefix="/deputados", dependencies=[Depends(check_header_auth)])
 
 @app.get("/health")
 async def health():

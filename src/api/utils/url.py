@@ -6,5 +6,5 @@ def build_paginated_url(
     else:
         query_string = ""
 
-    base_string = f"{base_url}?page={page_number}&page_size={page_size}"
+    base_string = f"{base_url}?pagina={page_number}&itens={page_size}"
     return f"{base_string}&{query_string}" if query_string else base_string

@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 from src.api.dependencies.service import LegislaturaServiceDep
 
 router = APIRouter(
-    prefix="/legislaturas",
     tags=["Legislaturas"],
 )
 

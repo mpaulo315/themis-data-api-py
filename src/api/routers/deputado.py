@@ -1,36 +1,31 @@
 from typing import Annotated
 
-from src.api.classes.response import PaginatedResponse
-from src.api.repositories.deputado import FilterParams
-from fastapi import APIRouter, Query, Request, status
+from src.api.routers import despesa_deputado
+
+from src.api.classes.response import PageParams, PaginatedResponse
+from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import JSONResponse
 from src.api.dependencies.service import DeputadoServiceDep
+from src.api.repositories.deputado import DeputadosQueryParams
 
 router = APIRouter(
-    prefix="/deputados",
     tags=["Deputados"],
 )
 
+router.include_router(despesa_deputado.router, prefix="/despesas")
 
 @router.get("/")
 async def read_deputados(
     request: Request,
     deputado_service: DeputadoServiceDep,
-    filter_params: Annotated[FilterParams, Query()],
+    page_params: Annotated[PageParams, Depends()],
+    filter_params: Annotated[DeputadosQueryParams, Depends()],
 ):
-    result = deputado_service.get_all(filter_params)
-
-    return PaginatedResponse.parse(
-        data=result.get("data", []),
-        page=filter_params.page,
-        page_size=filter_params.page_size,
-        total_count=result.get("count", 0),
-        request_url=str(request.url),
-    )
+    print("page_params", page_params)
+    print("filter_params", filter_params)
+    return deputado_service.get_all(request, page_params, filter_params)
 
 
-@router.get("/{deputado_id}")
+@router.get("/{deputado_id:int}")
 async def read_deputado_by_id(deputado_id: int, deputado_service: DeputadoServiceDep):
-    data = deputado_service.get_by_id(deputado_id)
-
-    return JSONResponse(status_code=status.HTTP_200_OK, content=data)
+    return deputado_service.get_by_id( deputado_id)
