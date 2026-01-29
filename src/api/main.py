@@ -1,16 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-
-env = os.getenv("ENV", "development")
-
-match env:
-    case "development" | "dev":
-        load_dotenv(dotenv_path=".env.development")
-    case "production" | "prod":
-        load_dotenv(dotenv_path=".env.production")
-    case _:
-        raise ValueError(f"Invalid environment: {env}")
+load_dotenv(override=True)
 
 from src.api.auth.header_auth import check_header_auth
 from fastapi import Depends, FastAPI
