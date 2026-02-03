@@ -1,7 +1,7 @@
 from typing import Annotated
-from src.api.classes.response import PageParams
-from src.api.dependencies.service import DespesaDeputadoServiceDep
-from src.api.repositories.despesa_deputado import DespesaDeputadoFilterParam
+from api.classes.response import PageParams
+from api.dependencies.service import DespesaDeputadoServiceDep
+from api.repositories.despesa_deputado import DespesaDeputadoFilterParam
 from fastapi import APIRouter, Depends, Request
 
 

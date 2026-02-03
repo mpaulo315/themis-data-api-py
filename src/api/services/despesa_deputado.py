@@ -1,8 +1,8 @@
-from src.api.repositories.despesa_deputado import DespesaDeputadoFilterParam
+from api.repositories.despesa_deputado import DespesaDeputadoFilterParam
 from fastapi import Request
-from src.api.dependencies.db import DBSessionDep
-from src.api.dependencies.repository import DespesaDeputadoRepositoryDep
-from src.api.classes.response import PageParams, PaginatedResponse
+from api.dependencies.db import DBSessionDep
+from api.dependencies.repository import DespesaDeputadoRepositoryDep
+from api.classes.response import PageParams, PaginatedResponse
 
 
 class DespesaDeputadoService:

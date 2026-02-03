@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv(override=True)
 
-from src.api.auth.header_auth import check_header_auth
+from api.auth.header_auth import check_header_auth
 from fastapi import Depends, FastAPI
-from src.api.routers import deputado, legislatura, despesa_deputado
+from api.routers import deputado, legislatura, despesa_deputado
 
 app = FastAPI()
 private_api = FastAPI()

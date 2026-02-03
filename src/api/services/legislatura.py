@@ -1,9 +1,9 @@
 from fastapi import Request
-from src.api.classes.response import PageParams, PaginatedResponse
-from src.api.dependencies.db import DBSessionDep
-from src.api.dependencies.repository import LegislaturaRepositoryDep
-from src.api.repositories.legislatura import LegislaturaRepository
-from src.typings.legislatura import LegislaturaID
+from api.classes.response import PageParams, PaginatedResponse
+from api.dependencies.db import DBSessionDep
+from api.dependencies.repository import LegislaturaRepositoryDep
+from api.repositories.legislatura import LegislaturaRepository
+from typings.legislatura import LegislaturaID
 
 
 class LegislaturaService:

@@ -1,12 +1,12 @@
 from typing import Annotated
 
-from src.api.routers import despesa_deputado
+from api.routers import despesa_deputado
 
-from src.api.classes.response import PageParams, PaginatedResponse
+from api.classes.response import PageParams, PaginatedResponse
 from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import JSONResponse
-from src.api.dependencies.service import DeputadoServiceDep
-from src.api.repositories.deputado import DeputadosQueryParams
+from api.dependencies.service import DeputadoServiceDep
+from api.repositories.deputado import DeputadosQueryParams
 
 router = APIRouter(
     tags=["Deputados"],

@@ -1,13 +1,13 @@
 from functools import partial
 from math import ceil
 from typing import TypeVar
-from src.api.utils.url import build_paginated_url
+from api.utils.url import build_paginated_url
 from fastapi.responses import JSONResponse
 from fastapi import status
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Query
 from functools import wraps
-from src.api.config.main import QUERY_MIN_LIMIT, QUERY_LIMIT, QUERY_MAX_LIMIT
+from api.config.main import QUERY_MIN_LIMIT, QUERY_LIMIT, QUERY_MAX_LIMIT
 from sqlalchemy.orm import Query
 
 

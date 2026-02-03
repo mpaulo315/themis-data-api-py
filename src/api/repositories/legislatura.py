@@ -1,7 +1,7 @@
 from typing import NamedTuple
-from src.api.dependencies.db import DBSessionDep
-from src.api.repositories.base import BaseRepository
-from src.typings.legislatura import Legislatura, LegislaturaID
+from api.dependencies.db import DBSessionDep
+from api.repositories.base import BaseRepository
+from typings.legislatura import Legislatura, LegislaturaID
 from sqlalchemy.orm import Query
 
 class LegislaturaRepository(BaseRepository):

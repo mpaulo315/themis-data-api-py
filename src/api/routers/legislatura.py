@@ -1,9 +1,9 @@
 from typing import Annotated
 
 from api.classes.response import PageParams
-from src.api.auth.header_auth import check_header_auth
+from api.auth.header_auth import check_header_auth
 from fastapi import APIRouter, Depends, Request
-from src.api.dependencies.service import LegislaturaServiceDep
+from api.dependencies.service import LegislaturaServiceDep
 
 router = APIRouter(
     tags=["Legislaturas"],

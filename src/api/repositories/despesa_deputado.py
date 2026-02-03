@@ -1,11 +1,11 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 # from typings.deputado import DeputadoID
-from src.api.dependencies.db import DBSessionDep
-from src.api.repositories.base import BaseRepository
-from src.typings.despesa_deputado import DespesaDeputado, DespesaID
+from api.dependencies.db import DBSessionDep
+from api.repositories.base import BaseRepository
+from typings.despesa_deputado import DespesaDeputado, DespesaID
 from sqlalchemy.orm import Query
-from src.fetcher.config.data_file import MIN_ANO_DESPESAS
+from fetcher.config.data_file import MIN_ANO_DESPESAS
 
 CURRENT_YEAR = datetime.now().year
 

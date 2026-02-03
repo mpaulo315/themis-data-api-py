@@ -1,14 +1,14 @@
 from typing import NamedTuple
 
-from src.api.repositories.deputado import DeputadosQueryParams
+from api.repositories.deputado import DeputadosQueryParams
 
-from src.api.classes.response import PageParams, PaginatedResponse
+from api.classes.response import PageParams, PaginatedResponse
 from fastapi import HTTPException, Request
 from sqlalchemy.sql.expression import func
 
-from src.api.dependencies.db import DBSessionDep
-from src.api.dependencies.repository import DeputadoRepositoryDep
-from src.typings.legislatura import Legislatura
+from api.dependencies.db import DBSessionDep
+from api.dependencies.repository import DeputadoRepositoryDep
+from typings.legislatura import Legislatura
 
 
 class DeputadoService:

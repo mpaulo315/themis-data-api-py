@@ -1,14 +1,14 @@
 from typing import Annotated
 from fastapi import Depends
-from src.api.dependencies.db import DBSessionDep
-from src.api.dependencies.repository import (
+from api.dependencies.db import DBSessionDep
+from api.dependencies.repository import (
     DeputadoRepositoryDep,
     DespesaDeputadoRepositoryDep,
     LegislaturaRepositoryDep,
 )
-from src.api.services.deputado import DeputadoService
-from src.api.services.legislatura import LegislaturaService
-from src.api.services.despesa_deputado import DespesaDeputadoService
+from api.services.deputado import DeputadoService
+from api.services.legislatura import LegislaturaService
+from api.services.despesa_deputado import DespesaDeputadoService
 
 
 def get_deputado_service(

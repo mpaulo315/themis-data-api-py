@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from src.api.dependencies.db import DBSessionDep
-from src.api.repositories.base import BaseRepository
-from src.typings.deputado import Deputado
-from src.typings.legislatura import LegislaturaID
+from api.dependencies.db import DBSessionDep
+from api.repositories.base import BaseRepository
+from typings.deputado import Deputado
+from typings.legislatura import LegislaturaID
 from sqlalchemy.orm import Query
 
 
