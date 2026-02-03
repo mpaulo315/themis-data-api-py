@@ -21,8 +21,6 @@ async def read_deputados(
     page_params: Annotated[PageParams, Depends()],
     filter_params: Annotated[DeputadosQueryParams, Depends()],
 ):
-    print("page_params", page_params)
-    print("filter_params", filter_params)
     return deputado_service.get_all(request, page_params, filter_params)
 
 
