@@ -39,10 +39,9 @@ class DespesaDeputadoRepository(BaseRepository):
         return self.session.query(DespesaDeputado).filter(DespesaDeputado.id == idDespesa)
 
     def query(self, query_param: GroupingQuery):
-
         select_fields = []
 
-        for group_field in query_param.group_fields_list:
+        for group_field in query_param.select_fields_list:
 
             agg_func = group_field.agg_func
             field = group_field.field
@@ -89,7 +88,7 @@ class DespesaDeputadoRepository(BaseRepository):
         query = self.session.query(
             *group_by_columns,
             *select_fields
-        )
+        ).order_by(*group_by_columns)
 
         query = query.group_by(*group_by_columns)
 

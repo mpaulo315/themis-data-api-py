@@ -15,7 +15,7 @@ class GroupField(BaseModel):
     label: str 
 
 class GroupingQuery(BaseModel):
-    group_fields_list: list[GroupField]
+    select_fields_list: list[GroupField]
     group_by_fields: list[str]
 
     @model_validator(mode="before")
@@ -32,9 +32,9 @@ class GroupingQuery(BaseModel):
                 if not f in model.model_fields:
                     raise ValueError(f"Field doesn't exist: {f}.")
 
-            for obj in data.get("group_fields_list"):
+            for obj in data.get("select_fields_list"):
                 if not obj.get("field") in model.model_fields:
-                    raise ValueError(f"Grouping field doesn't exist: {f}.")
+                    raise ValueError(f"Grouping field doesn't exist: {obj.get("field")}.")
 
             return data
         
