@@ -1,3 +1,4 @@
+from api.classes.query import GroupingQuery
 from api.repositories.despesa_deputado import DespesaDeputadoFilterParam
 from fastapi import Request
 from api.dependencies.db import DBSessionDep
@@ -17,3 +18,5 @@ class DespesaDeputadoService:
             request_url=str(request.url)
         )
     
+    def query(self, query_params: GroupingQuery):
+        return self.repo.query(query_params)

@@ -22,6 +22,7 @@ app.add_middleware(
 
 private_api.include_router(legislatura.router, prefix="/legislaturas", dependencies=[Depends(check_header_auth)])
 private_api.include_router(deputado.router, prefix="/deputados", dependencies=[Depends(check_header_auth)])
+private_api.include_router(despesa_deputado.router, prefix="/despesa-deputado", dependencies=[Depends(check_header_auth)])
 
 @app.get("/health")
 async def health():
